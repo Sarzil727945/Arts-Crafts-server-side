@@ -40,17 +40,27 @@ async function run() {
           });
           // server data post exit
 
-
-          // // server data get start
-          // app.get('/addToy', async (req, res) => {
-          //      let query = {};
-          //      if (req.query?.email) {
-          //           query = { email: req.query.email }
-          //      }
-          //      const result = await bookingCollection.find(query).toArray();
+          // server data get start
+          app.get('/addToy', async (req, res) => {
+               let query = {};
+               if (req.query?.email) {
+                    query = { email: req.query.email }
+               }
+               const result = await serverCollection.find(query).toArray();
+               res.send(result);
+          })
+          // server data get exit
+          
+          // // server data delete start
+          // app.delete('/addToy/:id', async(req, res) => {
+          //      const id = req.params.id;
+          //      const query = {_id: new ObjectId(id)}
+          //      const result = await serverCollection.deleteOne(query);
           //      res.send(result);
-          // })
-          // // server data get exit 
+          //    })
+          // // server data delete exit
+          
+          
 
           // Send a ping to confirm a successful connection
           await client.db("admin").command({ ping: 1 });
