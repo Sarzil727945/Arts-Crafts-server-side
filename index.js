@@ -4,7 +4,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const app = express();
 const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
 
 // middleware 
@@ -51,14 +51,14 @@ async function run() {
           })
           // server data get exit
           
-          // // server data delete start
-          // app.delete('/addToy/:id', async(req, res) => {
-          //      const id = req.params.id;
-          //      const query = {_id: new ObjectId(id)}
-          //      const result = await serverCollection.deleteOne(query);
-          //      res.send(result);
-          //    })
-          // // server data delete exit
+          // server data delete start
+          app.delete('/addToy/:id', async(req, res) => {
+               const id = req.params.id;
+               const query = {_id: new ObjectId(id)}
+               const result = await serverCollection.deleteOne(query);
+               res.send(result);
+             })
+          // server data delete exit
           
           
 
