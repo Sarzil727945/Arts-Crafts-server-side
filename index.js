@@ -26,11 +26,31 @@ const client = new MongoClient(uri, {
 async function run() {
      try {
           // Connect the client to the server	(optional starting in v4.7)
-          //     await client.connect();
+          await client.connect();
 
-          // // server link start
-          // const serverCollection = client.db('dbAssignment11').collection('cltAssignment11');
-          // // server link end 
+          // server link start
+          const serverCollection = client.db('dbAssignment11').collection('cltAssignment11');
+          // server link end 
+
+          // server data post start 
+          app.post('/addToy', async (req, res) => {
+               const newAdd = req.body;
+               const result = await serverCollection.insertOne(newAdd)
+               res.send(result);
+          });
+          // server data post exit
+
+
+          // // server data get start
+          // app.get('/addToy', async (req, res) => {
+          //      let query = {};
+          //      if (req.query?.email) {
+          //           query = { email: req.query.email }
+          //      }
+          //      const result = await bookingCollection.find(query).toArray();
+          //      res.send(result);
+          // })
+          // // server data get exit 
 
           // Send a ping to confirm a successful connection
           await client.db("admin").command({ ping: 1 });
