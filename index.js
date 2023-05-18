@@ -33,7 +33,7 @@ async function run() {
           // server link end 
 
           // server data post start 
-          app.post('/addToy', async (req, res) => {
+          app.post('/Toy', async (req, res) => {
                const newAdd = req.body;
                const result = await serverCollection.insertOne(newAdd)
                res.send(result);
@@ -41,7 +41,7 @@ async function run() {
           // server data post exit
 
           // server data get start
-          app.get('/addToy', async (req, res) => {
+          app.get('/Toy', async (req, res) => {
                let query = {};
                if (req.query?.email) {
                     query = { email: req.query.email }
@@ -50,17 +50,48 @@ async function run() {
                res.send(result);
           })
           // server data get exit
-          
-          // server data delete start
-          app.delete('/addToy/:id', async(req, res) => {
+
+          // server data get update start 
+          app.get('/Toy/:id', async (req, res) => {
                const id = req.params.id;
-               const query = {_id: new ObjectId(id)}
+               const query = { _id: new ObjectId(id) }
+               const result = await serverCollection.findOne(query);
+               res.send(result);
+          })
+          // server data get update end 
+
+          // server data update start
+          app.put('/Toy/:id', async (req, res) => {
+               const id = req.params.id;
+               const filter = { _id: new ObjectId(id) }
+               const options = { upsert: true };
+               const updateToy = req.body;
+               const addToy = {
+                    $set: {
+                         name: updateToy.name,
+                         photoURL: updateToy.photoURL,
+                         category: updateToy.category,
+                         price: updateToy.price,
+                         rating: updateToy.rating,
+                         quantity: updateToy.quantity,
+                         description: updateToy.description
+                    }
+               }
+               const result = await serverCollection.updateOne(filter, addToy, options);
+               res.send(result)
+          })
+          // server data update end 
+
+          // server data delete start
+          app.delete('/Toy/:id', async (req, res) => {
+               const id = req.params.id;
+               const query = { _id: new ObjectId(id) }
                const result = await serverCollection.deleteOne(query);
                res.send(result);
-             })
+          })
           // server data delete exit
-          
-          
+
+
 
           // Send a ping to confirm a successful connection
           await client.db("admin").command({ ping: 1 });
