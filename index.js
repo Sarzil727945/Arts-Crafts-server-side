@@ -30,6 +30,27 @@ async function run() {
           const serverCollection = client.db('dbAssignment11').collection('cltAssignment11');
           // server link end 
 
+          // search part start 
+          const indexKeys = { name: 1, category: 1 };
+          const indexOptions = { name: "nameCategory" };
+          const result = await serverCollection.createIndex(indexKeys, indexOptions);
+
+          app.get("/ToySearchText/:text", async (req, res) => {
+               const text = req.params.text;
+               const result = await serverCollection
+                    .find({
+                         $or: [
+                              { name: { $regex: text, $options: "i" } },
+                              { category: { $regex: text, $options: "i" } },
+                         ],
+                    })
+                    .toArray();
+               res.send(result);
+          });
+          // search part exit 
+
+
+
           // server data post start 
           app.post('/Toy', async (req, res) => {
                const newAdd = req.body;
