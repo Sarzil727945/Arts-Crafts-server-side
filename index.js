@@ -91,6 +91,22 @@ async function run() {
           })
           // server data delete exit
 
+          // server all data get start 
+          app.get('/Toy', async (req, res) => {
+               const cursor = serverCollection.find();
+               const result = await cursor.toArray();
+               res.send(result);
+          })
+          // server all data get end 
+
+
+          // app.get('/server/:id', async (req, res) => {
+          //      const id = req.params.id;
+          //      const query = { _id: new ObjectId(id) }
+          //      const result = await serverCollection.findOne(query)
+          //      res.send(result)
+          // })
+
 
 
           // Send a ping to confirm a successful connection
