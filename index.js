@@ -1,7 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-// jwt
-// const jwt = require('jsonwebtoken');
 const app = express();
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -40,6 +38,15 @@ async function run() {
           });
           // server data post exit
 
+          // server data get update start 
+          app.get('/Toy/:id', async (req, res) => {
+               const id = req.params.id;
+               const query = { _id: new ObjectId(id) }
+               const result = await serverCollection.findOne(query);
+               res.send(result);
+          })
+          // server data get update end 
+
           // server data get start
           app.get('/Toy', async (req, res) => {
                let query = {};
@@ -50,15 +57,6 @@ async function run() {
                res.send(result);
           })
           // server data get exit
-
-          // server data get update start 
-          app.get('/Toy/:id', async (req, res) => {
-               const id = req.params.id;
-               const query = { _id: new ObjectId(id) }
-               const result = await serverCollection.findOne(query);
-               res.send(result);
-          })
-          // server data get update end 
 
           // server data update start
           app.put('/Toy/:id', async (req, res) => {
