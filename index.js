@@ -18,13 +18,18 @@ const client = new MongoClient(uri, {
           version: ServerApiVersion.v1,
           strict: true,
           deprecationErrors: true,
-     }
+     },
+
+     // vercel problem solved start
+     useNewUrlParser: true,
+     useUnifiedTopology: true,
+     maxPoolSize: 10,
+     // vercel problem solved end
+
 });
 
 async function run() {
      try {
-          // Connect the client to the server	(optional starting in v4.7)
-          // await client.connect();
 
           // server link start
           const serverCollection = client.db('dbAssignment11').collection('cltAssignment11');
@@ -117,15 +122,6 @@ async function run() {
                res.send(result);
           })
           // server all data get end 
-
-
-          // app.get('/server/:id', async (req, res) => {
-          //      const id = req.params.id;
-          //      const query = { _id: new ObjectId(id) }
-          //      const result = await serverCollection.findOne(query)
-          //      res.send(result)
-          // })
-
 
 
           // Send a ping to confirm a successful connection
