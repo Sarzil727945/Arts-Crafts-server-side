@@ -36,8 +36,8 @@ async function run() {
           // server link end 
 
           // search part start 
-          const indexKeys = { name: 1, category: 1 };
-          const indexOptions = { name: "nameCategory" };
+          const indexKeys = { name: 1, displayName: 1, category: 1, };
+          const indexOptions = { name: "nameDisplayNameCategory" };
           const result = await serverCollection.createIndex(indexKeys, indexOptions);
 
           app.get("/ToySearchText/:text", async (req, res) => {
@@ -46,6 +46,7 @@ async function run() {
                     .find({
                          $or: [
                               { name: { $regex: text, $options: "i" } },
+                              { displayName: { $regex: text, $options: "i" } },
                               { category: { $regex: text, $options: "i" } },
                          ],
                     })
