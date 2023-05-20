@@ -19,13 +19,6 @@ const client = new MongoClient(uri, {
           strict: true,
           deprecationErrors: true,
      },
-
-     // vercel problem solved start
-     useNewUrlParser: true,
-     useUnifiedTopology: true,
-     maxPoolSize: 10,
-     // vercel problem solved end
-
 });
 
 async function run() {
@@ -77,11 +70,21 @@ async function run() {
           // server data get start
           app.get('/Toy', async (req, res) => {
                let query = {};
+               const sort = req.query.sort;
                if (req.query?.email) {
                     query = { email: req.query.email }
                }
-               const result = await serverCollection.find(query).toArray();
-               res.send(result);
+               // data sort part start 
+               else if (sort) {
+                    const result = await serverCollection.find(query).sort({ price: sort }).toArray();
+                    res.send(result)
+               }
+               // data sort part end 
+               else {
+
+                    const result = await serverCollection.find(query).toArray();
+                    res.send(result);
+               }
           })
           // server data get exit
 
@@ -143,5 +146,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
      console.log(`server is running on port: ${port}`);
 })
-
-module.exports = app;
