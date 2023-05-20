@@ -28,11 +28,6 @@ async function run() {
           const serverCollection = client.db('dbAssignment11').collection('cltAssignment11');
           // server link end 
 
-          // search part start 
-          const indexKeys = { name: 1, displayName: 1, category: 1, };
-          const indexOptions = { name: "nameDisplayNameCategory" };
-          const result = await serverCollection.createIndex(indexKeys, indexOptions);
-
           app.get("/ToySearchText/:text", async (req, res) => {
                const text = req.params.text;
                const result = await serverCollection
@@ -75,11 +70,12 @@ async function run() {
                     query = { email: req.query.email }
                }
                // data sort part start 
-               else if (sort) {
-                    const result = await serverCollection.find(query).sort({ price: sort }).toArray();
+               if (sort) {
+                    const result = await serverCollection.find(query).sort({price:sort}).toArray()
                     res.send(result)
                }
-               // data sort part end 
+               // data sort part start 
+
                else {
 
                     const result = await serverCollection.find(query).toArray();
