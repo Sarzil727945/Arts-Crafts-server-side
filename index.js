@@ -77,7 +77,6 @@ async function run() {
                // data sort part start 
 
                else {
-
                     const result = await serverCollection.find(query).toArray();
                     res.send(result);
                }
