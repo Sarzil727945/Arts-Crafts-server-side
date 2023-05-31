@@ -1,5 +1,7 @@
 const express = require('express');
 const cors = require('cors');
+// jwt
+const jwt = require('jsonwebtoken');
 const app = express();
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
@@ -21,12 +23,40 @@ const client = new MongoClient(uri, {
      },
 });
 
+// jwt verify start 
+const verifyJwt = (req, res, next) => {
+     const authorization = req.headers.authorization;
+     if (!authorization) {
+          return res.status(401).send({ error: true, message: 'unauthorized access' })
+     }
+     const token = authorization.split(' ')[1];
+     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+          if (err) {
+               return res.status(403).send({ error: true, message: 'unauthorized access' })
+          }
+          req.decoded = decoded;
+          next();
+     })
+}
+// jwt verify end
+
 async function run() {
      try {
 
           // server link start
           const serverCollection = client.db('dbAssignment11').collection('cltAssignment11');
           // server link end 
+
+          // jwt localhost start
+          app.post('/jwt', (req, res) => {
+               const user = req.body;
+               console.log(user);
+               const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+                    expiresIn: '2h'
+               });
+               res.send({ token });
+          })
+          // jwt localhost end
 
           app.get("/ToySearchText/:text", async (req, res) => {
                const text = req.params.text;
@@ -62,8 +92,34 @@ async function run() {
           })
           // server data get update end 
 
-          // server data get start
-          app.get('/Toy', async (req, res) => {
+          // // server data get start
+          // app.get('/Toy', async (req, res) => {
+          //      let query = {};
+          //      const sort = req.query.sort;
+          //      if (req.query?.email) {
+          //           query = { email: req.query.email }
+          //      }
+          //      // data sort part start 
+          //      if (sort) {
+          //           const result = await serverCollection.find(query).sort({ price: sort }).toArray()
+          //           res.send(result)
+          //      }
+          //      // data sort part start 
+
+          //      else {
+          //           const result = await serverCollection.find(query).toArray();
+          //           res.send(result);
+          //      }
+          // })
+          // // server data get exit
+
+          // jwt added server data get start
+          app.get('/Toy', verifyJwt, async (req, res) => {
+               const decoded = req.decoded;
+               if (decoded.email !== req.query.email) {
+                    return res.status(403).send({ error: 1, message: 'forbidden access' })
+               }
+
                let query = {};
                const sort = req.query.sort;
                if (req.query?.email) {
@@ -71,7 +127,7 @@ async function run() {
                }
                // data sort part start 
                if (sort) {
-                    const result = await serverCollection.find(query).sort({price:sort}).toArray()
+                    const result = await serverCollection.find(query).sort({ price: sort }).toArray()
                     res.send(result)
                }
                // data sort part start 
@@ -81,7 +137,7 @@ async function run() {
                     res.send(result);
                }
           })
-          // server data get exit
+          // jwt added server data get exit
 
           // server data update start
           app.put('/Toy/:id', async (req, res) => {
