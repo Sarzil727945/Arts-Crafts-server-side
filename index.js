@@ -93,26 +93,26 @@ async function run() {
           })
           // server data get update end 
 
-          // // server data get start
-          // app.get('/Toy', async (req, res) => {
-          //      let query = {};
-          //      const sort = req.query.sort;
-          //      if (req.query?.email) {
-          //           query = { email: req.query.email }
-          //      }
-          //      // data sort part start 
-          //      if (sort) {
-          //           const result = await serverCollection.find(query).sort({ price: sort }).toArray()
-          //           res.send(result)
-          //      }
-          //      // data sort part start 
+          // server data get start
+          app.get('/Toy', async (req, res) => {
+               let query = {};
+               const sort = req.query.sort;
+               if (req.query?.email) {
+                    query = { email: req.query.email }
+               }
+               // data sort part start 
+               if (sort) {
+                    const result = await serverCollection.find(query).sort({ price: sort }).toArray()
+                    res.send(result)
+               }
+               // data sort part start 
 
-          //      else {
-          //           const result = await serverCollection.find(query).toArray();
-          //           res.send(result);
-          //      }
-          // })
-          // // server data get exit
+               else {
+                    const result = await serverCollection.find(query).toArray();
+                    res.send(result);
+               }
+          })
+          // server data get exit
 
           // jwt added server data get start
           app.get('/Toy', verifyJwt, async (req, res) => {
