@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-// jwt
+// // jwt
 const jwt = require('jsonwebtoken');
 const app = express();
 const port = process.env.PORT || 5000;
@@ -23,9 +23,11 @@ const client = new MongoClient(uri, {
      },
 });
 
+
 // jwt verify start 
 const verifyJwt = (req, res, next) => {
      const authorization = req.headers.authorization;
+
      if (!authorization) {
           return res.status(401).send({ error: true, message: 'unauthorized access' })
      }
@@ -50,9 +52,8 @@ async function run() {
           // jwt localhost start
           app.post('/jwt', (req, res) => {
                const user = req.body;
-               console.log(user);
                const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-                    expiresIn: '2h'
+                    expiresIn: '1h'
                });
                res.send({ token });
           })
