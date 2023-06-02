@@ -47,6 +47,7 @@ async function run() {
 
           // server link start
           const serverCollection = client.db('dbAssignment11').collection('cltAssignment11');
+          const usersCollection = client.db('dbAssignment11').collection('users');
           // server link end 
 
           // jwt localhost start
@@ -59,6 +60,7 @@ async function run() {
           })
           // jwt localhost end
 
+          // search part start
           app.get("/ToySearchText/:text", async (req, res) => {
                const text = req.params.text;
                const result = await serverCollection
@@ -76,6 +78,14 @@ async function run() {
 
 
 
+          // user data post start 
+          app.post('/users', async (req, res) => {
+               const user = req.body;
+               const result = await usersCollection.insertOne(user)
+               res.send(result);
+          });
+          // user data post exit
+
           // server data post start 
           app.post('/Toy', async (req, res) => {
                const newAdd = req.body;
@@ -83,7 +93,7 @@ async function run() {
                res.send(result);
           });
           // server data post exit
-
+          
           // server data get update start 
           app.get('/Toy/:id', async (req, res) => {
                const id = req.params.id;
