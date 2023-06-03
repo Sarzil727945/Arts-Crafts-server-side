@@ -77,10 +77,18 @@ async function run() {
           // search part exit 
 
 
-
           // user data post start 
           app.post('/users', async (req, res) => {
                const user = req.body;
+
+               // google sign up part start
+               const query = { email: user.email }
+               const existingUser = await usersCollection.findOne(query);
+               if (existingUser) {
+                    return res.send({ message: 'user already exists' })
+               }
+               // google sign up part start
+
                const result = await usersCollection.insertOne(user)
                res.send(result);
           });
@@ -93,7 +101,7 @@ async function run() {
                res.send(result);
           });
           // server data post exit
-          
+
           // server data get update start 
           app.get('/Toy/:id', async (req, res) => {
                const id = req.params.id;
