@@ -77,7 +77,7 @@ async function run() {
           // search part exit 
 
 
-          // user data post start 
+          // user information post dataBD start 
           app.post('/users', async (req, res) => {
                const user = req.body;
 
@@ -92,7 +92,7 @@ async function run() {
                const result = await usersCollection.insertOne(user)
                res.send(result);
           });
-          // user data post exit
+          // user information post dataBD exit 
 
           // server data post start 
           app.post('/Toy', async (req, res) => {
